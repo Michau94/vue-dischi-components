@@ -2,8 +2,15 @@
   <header>
     <div class="container">
       <img class="img-fluid" src="../assets/images/logo.png" alt="Logo" />
-      <select name="filter">
+      <select
+        name="filter"
+        v-model="actualFilter"
+        @change="$emit('selectedOption', actualFilter)"
+      >
         <option value="all">All</option>
+        <option v-for="(option, ind) in opt" :value="option" :key="ind">
+          {{ option }}</option
+        >
       </select>
     </div>
   </header>
@@ -12,6 +19,12 @@
 <script>
 export default {
   Name: "Header",
+  props: ["opt"],
+  data() {
+    return {
+      actualFilter: "all",
+    };
+  },
 };
 </script>
 
