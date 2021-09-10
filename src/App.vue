@@ -1,7 +1,10 @@
 <template>
   <div id="app">
     <Header :opt="options" @selectedOption="selected" />
-    <main>
+    <Loader v-if="isLoading">
+      <h1 class="text-light">Is Loading...</h1>
+    </Loader>
+    <main v-else>
       <Content :albums="albumList" :filtered="filteredAlbum" />
     </main>
   </div>
@@ -11,17 +14,20 @@
 import axios from "axios";
 import Header from "./components/Header.vue";
 import Content from "./components/Content.vue";
+import Loader from "./components/Loader.vue";
 
 export default {
   name: "App",
   components: {
     Header,
     Content,
+    Loader,
   },
   data() {
     return {
       albumList: [],
       currentOption: "all",
+      isLoading: true,
     };
   },
   created() {
@@ -29,6 +35,7 @@ export default {
       .get("https://flynn.boolean.careers/exercises/api/array/music")
       .then((res) => {
         this.albumList = res.data.response;
+        this.isLoading = false;
       });
   },
   methods: {
@@ -61,7 +68,6 @@ export default {
       sorted.sort((a, b) => {
         return a.year - b.year;
       });
-
       return sorted;
     },
   },
